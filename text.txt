@@ -1,0 +1,56 @@
+
+// <div class="all">
+//                     <?php foreach ($users_list as $user) : ?>
+                    
+//                         <button class="member-list" data-id="<?=getChatUserInstance($user, 'id', $db, $auth)?>" data-isgroup="<?=$user['is_group']?>">
+//                             <div class="user-content">
+//                                 <div class="avatar-holder">
+//                                     <img src="" alt="">
+//                                 </div>
+//                                 <div class="user-details">
+//                                     <?php if ($user['is_group'] != 'true') :?>
+//                                         <h1><?=getChatUserInstance($user, 'name', $db, $auth)?> <?=getChatUserInstance($user, 'last_name', $db, $auth)?></h1>
+//                                 
+//                                     <?php else : ?>
+//                                         <h1><?=getChatUserInstance($user, 'name', $db, $auth)?></h1>
+//                                       
+//                                     <?php endif;?>
+//                                 </div>
+//                             </div>
+//                         </button>
+//                     <?php endforeach; ?>
+//                 </div>
+//                 <div class="dialog">
+//                     <?php foreach ($users_list as $user) : ?>
+//                         <?php if ($user['is_group'] != 'true') :?>
+//                             <button class="member-list" data-id="<?=getChatUserInstance($user, 'id', $db, $auth)?>" data-isgroup="false">
+//                                 <div class="user-content">
+//                                     <div class="avatar-holder">
+//                                         <img src="" alt="">
+//                                     </div>
+//                                     <div class="user-details">
+//                                         <h1><?=getChatUserInstance($user, 'name', $db, $auth)?> <?=getChatUserInstance($user, 'last_name', $db, $auth)?> </h1>
+//                                        
+//                                     </div>
+//                                 </div>
+//                             </button>
+//                         <?php endif;?>
+//                     <?php endforeach; ?>
+//                 </div>
+//                 <div class="group">
+//                     <?php foreach ($users_list as $user) : ?>
+//                         <?php if ($user['is_group'] === 'true') :?>
+//                             <button class="member-list" data-id="<?=getChatUserInstance($user, 'id', $db, $auth)?>" data-isgroup="true">
+//                                 <div class="user-content">
+//                                     <div class="avatar-holder">
+//                                         <img src="" alt="">
+//                                     </div>
+//                                     <div class="user-details">
+//                                         <h1><?=getChatUserInstance($user, 'name', $db, $auth)?></h1>
+//                                         <!-- <p>hello I'm Irakli Qiria how are you</p> -->
+//                                     </div>
+//                                 </div>
+//                             </button>
+//                         <?php endif;?>
+//                     <?php endforeach; ?>
+//                 </div>
