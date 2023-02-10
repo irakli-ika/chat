@@ -10,7 +10,6 @@ const deleteMessage = (id) => {
             data:{deleteId:id},            
             dataType: "html",                  
             success: function(data){
-                console.log(data);
             }
         });
     }
@@ -25,7 +24,9 @@ const deleteConversation = (conversation_id, user_id) =>{
             data:{conversation_id, user_id},            
             dataType: "html",                  
             success: function(data){
-                console.log(data);
+                leftLoader.style.display = 'block';
+                document.querySelector('.message-box').style.display = 'none';
+                document.querySelector('.message-box-logo').style.display = 'flex';
             }
         });
     }
@@ -40,7 +41,6 @@ const leaveGroup = (group_id, user_id) => {
             data:{group_id, user_id},            
             dataType: "html",                  
             success: function(data){
-                console.log(data);
             }
         });
     }

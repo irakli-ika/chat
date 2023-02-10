@@ -32,6 +32,10 @@ section aside.right-side {
     border-radius: 0 11px 11px 0;
     overflow: hidden;
 }
+.users {
+    position: relative;
+    height: 92%;
+}
 .left-side-navbar {
     border-bottom: 1px solid #ebebeb;
     height: 50px;
@@ -46,6 +50,7 @@ section aside.right-side {
     box-shadow: inset 0 -2px 0 0 #fb946b;
 }
 .left-side .users .member-list {
+    position: relative;
     border: none;
     border-bottom: 1px solid #ebebeb;
     max-height: 65px;
@@ -53,6 +58,19 @@ section aside.right-side {
     width: 100%;
     background-color: transparent;
     cursor: pointer;
+}
+.unread_message {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: lightgreen;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .left-side .users .member-list:hover {
     background-color: #ffc8b2 !important;
@@ -235,4 +253,53 @@ section aside.right-side {
 }
 .show {
     display: block !important;
+}
+.sidebar {
+    display: none !important;
+    font-size: 24px;
+    cursor: pointer;
+}
+.sidebar:hover {
+    color: #fb946b;
+}
+
+@media (max-width: 1050px) {
+    section {
+        width: 740px;
+    }
+    .left-side-navbar button {
+        padding-inline: 6px;
+        font-size: 15px;
+    }
+}
+@media (max-width: 769px) {
+    section {
+        width: 500px;
+    }
+    .sidebar {
+        display: flex !important;
+    }
+    section aside.right-side {
+        display: none;
+        border-radius: 11px;
+    }
+    section aside.left-side {
+        display: block;
+        width: 70%;
+        border-radius: 11px;
+    }
+}
+@media (max-width: 450px) {
+    section {
+        width: 320px;
+    }
+    section aside.right-side {
+        display: none;
+        border-radius: 11px;
+    }
+    section aside.left-side {
+        display: block;
+        width: 70%;
+        border-radius: 11px;
+    }
 }

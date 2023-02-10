@@ -1,4 +1,3 @@
-let qty = 0;
 function getMessages(){
     const request = new XMLHttpRequest();
     request.addEventListener("readystatechange", () => {
@@ -37,21 +36,16 @@ function getMessages(){
         }).join('');
         const messages = document.querySelector('.message-body > div');
 
-        console.log(results.length + "up");
 
-        console.log(document.getElementById(`${conversation_id}`).childElementCount);
-
-        if (document.getElementById(`${conversation_id}`).childElementCount < results.length) {
+        if (document.getElementById(`${conversation_id}`).childElementCount != results.length) {
             messages.innerHTML = html;
             document.querySelector('.message-body').scrollTop = messages.scrollHeight;
         }
-        // console.log(results.length + "up");
-
-        // console.log(document.getElementById(`${conversation_id}`).childElementCount);
-        // qty = results.length
     }
     request.send();
 }
+
+
 // send message
 document.querySelector('form').addEventListener('submit', (e)=> {
     e.preventDefault();
@@ -61,7 +55,7 @@ document.querySelector('form').addEventListener('submit', (e)=> {
     data.append('message', message);
     data.append('sender_id', user_id);
     data.append('conversation_id', conversation_id);
-    
+
     const request = new XMLHttpRequest();
     request.open('POST', 'api/send_messages.php');
     
@@ -69,25 +63,34 @@ document.querySelector('form').addEventListener('submit', (e)=> {
         message_inner.message.value = '';
         message_inner.message.focus();
         getMessages();
+        console.log(request.responseText);
+        
     }
     if (message.length > 0) {
         request.send(data);
     }
 });
 
-function getUserlist(status) {
+
+// get user list
+function getUserlist() {
+    const userListAll = document.querySelector('.all');
+    const userListDialog = document.querySelector('.dialog');
+    const userListGroup = document.querySelector('.group');
+    let unreaded = false;
     const request = new XMLHttpRequest();
-    // request.addEventListener("readystatechange", () => {
-    //     if (request.readyState === 4 && request.status === 200) {
-    //         loader.style.display = 'none';
-    //     }
-    //   });
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            leftLoader.style.display = 'none';
+        }
+      });
     request.open("GET", `api/get_user_list.php?user_id=${user_id}`);
   
     request.onload = function(){
       const results = JSON.parse(request.responseText);
       const html = results.map(function(message){
-        if (status == 'all') {
+        message.unreaded > 0 ? unreaded = true : false;
+        if (userListAll.classList.contains('show')) {
             return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id ?? message.id}" data-isgroup="${message.is_group ?? 'false'}">
                         <div class="user-content">
                             <div class="avatar-holder">
@@ -97,9 +100,10 @@ function getUserlist(status) {
                                 <h1>${message.is_group ? message.name : message.name + " " + message.last_name}</h1>
                                 <!-- <p>hello I'm Irakli Qiria how are you</p> -->
                             </div>
+                            <div class="unread_message" style="${message.unreaded > 0 ? 'display: flex' : 'display: none'}">${message.unreaded > 0 ? message.unreaded : ''}</div>
                         </div>
                     </button>`
-        } else if(status == 'dialog') {
+        } else if(userListDialog.classList.contains('show')) {
             if (!message.is_group) {
                 return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id}" data-isgroup="'false'">
                 <div class="user-content">
@@ -110,8 +114,9 @@ function getUserlist(status) {
                                 <h1>${message.name} ${message.last_name}</h1>
                                 <!-- <p>hello I'm Irakli Qiria how are you</p> -->
                                 </div>
-                                </div>
-                                </button>`
+                                <div class="unread_message" style="${message.unreaded > 0 ? 'display: flex' : 'display: none'}">${message.unreaded > 0 ? message.unreaded : ''}</div>
+                            </div>
+                        </button>`
             }
         } else {
             if (message.is_group) {
@@ -124,23 +129,44 @@ function getUserlist(status) {
                                         <h1>${message.name}</h1>
                                         <!-- <p>hello I'm Irakli Qiria how are you</p> -->
                                     </div>
+                                    <div class="unread_message" style="${message.unreaded > 0 ? 'display: flex' : 'display: none'}">${message.unreaded > 0 ? message.unreaded : ''}</div>
                                 </div>
                             </button>`
             }
         }
         }).join('');
-        
-        // changing content if has change
-        // if (qty < results.length) {
-        //     const messages = document.querySelector('.message-body > div');
-        //     messages.innerHTML = html;
-        //     document.querySelector('.message-body').scrollTop = messages.scrollHeight;
-        // }
-        // qty = results.length
-        
-        document.querySelector(`.${status}`).innerHTML = html;
 
+        if (userListAll.classList.contains('show')) {
+            if (userListAll.childElementCount != results.length || unreaded) {
+                userListAll.innerHTML = html;
+                unreaded = false;
+            }
+        } else if(userListDialog.classList.contains('show')) {
+        if (userListDialog.childElementCount != results.length || unreaded) {
+            userListDialog.innerHTML = html;
+            unreaded = false
+            }
+        } else {
+            if (userListGroup.childElementCount != results.length || unreaded) {
+                userListGroup.innerHTML = html;
+                unreaded = false;
+            }
+        }
+        
     }
     request.send();
 }
 
+
+function changeStatus(conversation_id) {
+    const data = new FormData();
+    data.append('conversation_id', conversation_id);
+    
+    const request = new XMLHttpRequest();
+    request.open('POST', 'api/change_status.php');
+    
+    request.onload = function(){
+    }
+    
+    request.send(data);
+}

@@ -23,7 +23,7 @@ function delete_conversation($db, $conversation_id, $user_id){
             if ($value['user_id'] == $user_id) {
                 if (!$value['remove']) {
                     // remove receiver
-                    updateField($db, 'receiver', 'remove', 1, "`conversation_id` = $conversation_id && `user_id` = {$user_id}", 'true');
+                    updateField($db, 'receiver', "`remove` = 1", "`conversation_id` = $conversation_id && `user_id` = {$user_id}", 'true');
                      
                     foreach($messages as $message) {
                         // remove messages

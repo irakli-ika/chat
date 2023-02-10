@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="loader/loader.css">
+    <link rel="stylesheet" href="loader/left_loader.css">
     <title>Chat</title>
 </head>
 <body>
@@ -37,6 +38,7 @@
                 <button data-role='group'>ჯგუფები</button>
             </nav>
             <div class="users">
+                <?php include 'loader/left_loader.php' ?>
                 <div class="all"></div>
                 <div class="dialog"></div>
                 <div class="group"></div>
@@ -47,6 +49,9 @@
             <div class="message-box">
                 <div class="top-side">
                     <div>
+                        <div class="sidebar">
+                            <i class='bx bx-sidebar'></i>
+                        </div>
                         <div class="avatar-holder"></div>
                         <span class="user-name"></span>
                     </div>
@@ -82,6 +87,8 @@
     <script src="script/script.js"></script>
     <script src="script/buttons_function.js"></script>
     <script type="text/javascript">
+        const leftLoader = document.getElementById('left-loader');
+        const loader = document.getElementById('loader');
         let conversation_id = '';
         window.openMessage = (currentUser) => {
             document.querySelectorAll('.member-list').forEach(allUserButton => {
@@ -95,10 +102,10 @@
                 allUserButton.classList.remove('active');
                 currentUser.classList.add('active');
                 
-            })          
+            })
             document.getElementById('loader').style.display = 'block';
 
-            document.querySelector('.message-body > div').innerHTML = '';
+            // document.querySelector('.message-body > div').innerHTML = '';
 
             document.querySelector('.message-box').style.display = 'flex';
             document.querySelector('.message-box-logo').style.display = 'none';
@@ -111,18 +118,45 @@
             document.querySelector('.message-body > div').id = currentUser.dataset.id;
 
             conversation_id = currentUser.dataset.id;
-            
+            currentUser.querySelector('.unread_message').style.display = 'none';
 
-            
-
-            // interval = clearInterval(interval);
-            // if (typeof interval === 'undefined'){
-            //     console.log('ok');
-            // }
+            changeStatus(currentUser.dataset.id);
             getMessages()
+            getUserlist();
+
+
+                if (window.innerWidth < 769) {
+                    document.querySelector('section aside.right-side').style.display = 'block'
+                    document.querySelector('section aside.left-side').style.display = 'none';
+                }
+            
+            // if(document.querySelector('section aside.right-side').style.display == 'block') {
+            //     document.querySelector('section aside.right-side').style.display == 'block'
+            //     document.querySelector('section aside.left-side').style.display = 'none';
+            // }
+            
         }
-        window.setInterval(getMessages, 3000);
+        
+
+        // start data update
+        window.setInterval(multiFunction, 3000);
+        function multiFunction() {
+            getMessages();
+            getUserlist();
+        }
+
+        document.querySelector('.sidebar').addEventListener("click", () => {
+            document.querySelector('section aside.right-side').style.display = 'none'
+            document.querySelector('section aside.left-side').style.display = 'block';
+        })
+        
+
         const user_id = <?=$auth['id'];?>;
+
+
+        // window.addEventListener("resize", function() {
+        //     if (window.innerWidth < 769) document.querySelector('.sidebar').style.display = 'flex !important';
+        // });
     </script>
 </body>
 </html>

@@ -14,6 +14,7 @@ function getData($db, $table, $api)
     if ($api == 'true') echo json_encode($row);
     else return $row;
 }
+
 function getDataWithCondition($db, $table, $condition, $api)
 {
     $query = "SELECT * from `$table` WHERE $condition";
@@ -85,14 +86,25 @@ function insertFields($db, $table, $fields, $values)
     VALUES ($values)";
 
     if (mysqli_query($db, $query)) {
-        echo "New record created successfully";
+        return "New record created successfully";
     } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($db);
+        return "Error: " . $query . "<br>" . mysqli_error($db);
+    }
+}
+function insertFieldsGetId($db, $table, $fields, $values)
+{
+    $query = "INSERT INTO `$table` ($fields)
+    VALUES ($values)";
+
+    if (mysqli_query($db, $query)) {
+        return mysqli_insert_id($db);
+    } else {
+        return "Error: " . $query . "<br>" . mysqli_error($db);
     }
 }
 
-function updateField($db, $table, $field, $value, $condition, $api) {
-    $query = "UPDATE `$table` SET `$field`='$value' WHERE $condition";
+function updateField($db, $table, $field_value, $condition, $api) {
+    $query = "UPDATE `$table` SET $field_value WHERE $condition";
 
     if (mysqli_query($db, $query)) {
         echo "Record updated successfully";
