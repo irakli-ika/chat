@@ -1,4 +1,5 @@
 function getMessages(){
+    // let seen = false;
     const request = new XMLHttpRequest();
     request.addEventListener("readystatechange", () => {
         if (request.readyState === 4 && request.status === 200) {
@@ -17,6 +18,9 @@ function getMessages(){
                                 <a href="#">${message.name} ${message.last_name}</a>
                             </div>
                             <p>${message.message}</p>
+                            <div class="message-details">
+                                <div class="timestamp">1:11</div>
+                            </div>
                         </div>
                     </div>`
             } else {
@@ -26,6 +30,10 @@ function getMessages(){
                                     <a href="#">${message.name} ${message.last_name}</a>
                                 </div>
                                 <p>${message.message}</p>
+                                <div class="message-details">
+                                    <div class="timestamp">1:11</div>
+                                    <div class="${message.seen == 1 ? 'show' : 'hidden'}">seen</div>
+                                </div>
                                 <i class="fa-solid fa-ellipsis-vertical deleteMessage" onclick="openDelModal(event)" data-message-id=${message[0]}></i>
                                 <div class="deleteModal">
                                     <button onclick="deleteMessage(${message[0]})">წაშლა</button>
@@ -63,7 +71,8 @@ document.querySelector('form').addEventListener('submit', (e)=> {
         message_inner.message.value = '';
         message_inner.message.focus();
         getMessages();
-        console.log(request.responseText);
+        console.log(request.responseText)
+        
         
     }
     if (message.length > 0) {
@@ -135,16 +144,15 @@ function getUserlist() {
             }
         }
         }).join('');
-
         if (userListAll.classList.contains('show')) {
             if (userListAll.childElementCount != results.length || unreaded) {
                 userListAll.innerHTML = html;
                 unreaded = false;
             }
         } else if(userListDialog.classList.contains('show')) {
-        if (userListDialog.childElementCount != results.length || unreaded) {
-            userListDialog.innerHTML = html;
-            unreaded = false
+            if (userListDialog.childElementCount != results.length || unreaded) {
+                userListDialog.innerHTML = html;
+                unreaded = false
             }
         } else {
             if (userListGroup.childElementCount != results.length || unreaded) {
@@ -161,11 +169,13 @@ function getUserlist() {
 function changeStatus(conversation_id) {
     const data = new FormData();
     data.append('conversation_id', conversation_id);
+    data.append('user_id', user_id);
     
     const request = new XMLHttpRequest();
     request.open('POST', 'api/change_status.php');
     
     request.onload = function(){
+
     }
     
     request.send(data);

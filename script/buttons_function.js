@@ -41,6 +41,9 @@ const leaveGroup = (group_id, user_id) => {
             data:{group_id, user_id},            
             dataType: "html",                  
             success: function(data){
+                leftLoader.style.display = 'block';
+                document.querySelector('.message-box').style.display = 'none';
+                document.querySelector('.message-box-logo').style.display = 'flex';
             }
         });
     }

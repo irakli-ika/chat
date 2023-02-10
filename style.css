@@ -64,13 +64,15 @@ section aside.right-side {
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    background: lightgreen;
+    background: #fb946b;
     border-radius: 50%;
     width: 25px;
     height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #343a40;
+    font-weight: bold;
 }
 .left-side .users .member-list:hover {
     background-color: #ffc8b2 !important;
@@ -144,6 +146,11 @@ section aside.right-side {
     padding: 10px 10px;
     background-color: transparent;
 }
+.message-body .receive-message {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
 .message-body .receive-message,
 .message-body .sent-message {
     margin-block: 20px;
@@ -191,6 +198,7 @@ section aside.right-side {
 .message-body a{
     text-decoration: none;
     color: #343a40;
+    font-weight: bold;
 }
 .message-body .receive-message p {
     color: #343a40;
@@ -262,6 +270,22 @@ section aside.right-side {
 .sidebar:hover {
     color: #fb946b;
 }
+.hidden {
+    display: none;
+}
+.seen { 
+    
+}
+.message-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+.sent-message .message-details {
+    justify-content: end;
+}
+
 
 @media (max-width: 1050px) {
     section {
@@ -288,10 +312,17 @@ section aside.right-side {
         width: 70%;
         border-radius: 11px;
     }
+    .custom-form-group input {
+        width: 80%;
+    }
+    .message-body .receive-message i, .message-body .sent-message i {
+        display: block;
+    }
 }
 @media (max-width: 450px) {
     section {
         width: 320px;
+        font-size: 14px;
     }
     section aside.right-side {
         display: none;
@@ -301,5 +332,8 @@ section aside.right-side {
         display: block;
         width: 70%;
         border-radius: 11px;
+    }
+    .message-body > div {
+        padding: 10px 0;
     }
 }

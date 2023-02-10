@@ -16,8 +16,7 @@ foreach($user_list as $user) {
         $user_with_conversation = getDataWithLeftJoinCondition($db, "receiver", "users", "`receiver`.`user_id` = `users`.`id`", "`conversation_id` = {$user['conversation_id']} && `user_id` != {$user_id}", 'false');       
 
         foreach($user_with_conversation as $item) {
-            $unread_message = getDataWithCondition($db, 'messages', "`conversation_id` = {$item['conversation_id']} && `sender_id` != {$user_id} && `received` = 1", "false");
-            // $result [] = $item ['unreaded'] = $unread_message;
+            $unread_message = getDataWithCondition($db, 'received_messages', "`conversation_id` = {$item['conversation_id']} && `receiver_id` = {$user_id}", "false");
             $data = $item;
             $data['unreaded']= count($unread_message);
             $result [] = $data;
@@ -26,7 +25,7 @@ foreach($user_list as $user) {
         $receiverInstance = getDataWithCondition($db, 'conversations', "`id` = {$user['conversation_id']}", "false");
         $user_with_conversation = getDataWithLeftJoinCondition($db, "receiver", "conversations", "`receiver`.`conversation_id` = `conversations`.`id`", "`user_id` = {$user_id} && 'is_group' = 'true'", 'false');
         foreach($receiverInstance as $item) {
-            $unread_message = getDataWithCondition($db, 'messages', "`conversation_id` = {$item['id']} && `sender_id` != {$user_id} && `received` = 1", "false");
+            $unread_message = getDataWithCondition($db, 'received_messages', "`conversation_id` = {$item['id']} && `receiver_id` = {$user_id}", "false");
             $data = $item;
             $data['unreaded']= count($unread_message);
             $result [] = $data;
