@@ -2,15 +2,14 @@
     include "db.php";
     include "functions.php";
     include "helpers.php";
-
+    // print_r($_SESSION);
     $user_id = $_GET['user'];
-
     // CSRF token
     $token = $_SESSION['token'] = md5(uniqid(mt_rand(), true));
     // Login user
     $auth = $_SESSION['auth'] = [...getDataWithCondition($db, 'users', "`id` = {$user_id}", 'false')[0]];
 
-    $users_list = getDataWithLeftJoinCondition($db, "receiver", "conversations", "`receiver`.`conversation_id` = `conversations`.`id`", "`receiver`.`user_id` = {$auth['id']} && `remove` != 1", 'false');
+    $message_qty = count(getDataWithCondition($db, 'received_messages', "`receiver_id` = {$user_id}", 'false'));
 
 ?>  
 <!DOCTYPE html>
@@ -29,7 +28,14 @@
     <title>Chat</title>
 </head>
 <body>
+    <?=include 'add_conversation_modal.php';?>
     <h1 class="h1">Live Chat</h1>
+    <header>
+        <div>
+            <i class="fa-regular fa-comment"></i>
+            <span class="message_qty"><?=$message_qty?></span>
+        </div>
+    </header>
     <section>
         <aside class="left-side">
             <nav class="left-side-navbar">
@@ -42,6 +48,11 @@
                 <div class="all"></div>
                 <div class="dialog"></div>
                 <div class="group"></div>
+            </div>
+            <div class="footer">
+                <button onclick="addConversation()">
+                    <i class="fa-solid fa-circle-plus"></i>
+                </button>
             </div>
         </aside>
         <aside class="right-side">
@@ -110,7 +121,7 @@
             document.querySelector('.message-box').style.display = 'flex';
             document.querySelector('.message-box-logo').style.display = 'none';
 
-            document.querySelector('.user-name').innerText = currentUser.innerText;
+            document.querySelector('.user-name').innerText = currentUser.dataset.name;
 
             document.getElementById('deleteConversation').dataset.id = currentUser.dataset.id;
             document.getElementById('leaveGroup').dataset.id = currentUser.dataset.id;
@@ -139,10 +150,11 @@
         
 
         // start data update
-        window.setInterval(multiFunction, 3000);
+        window.setInterval(multiFunction, 5000);
         function multiFunction() {
             getMessages();
             getUserlist();
+            getMessageQty(user_id);
         }
 
         document.querySelector('.sidebar').addEventListener("click", () => {
@@ -150,13 +162,13 @@
             document.querySelector('section aside.left-side').style.display = 'block';
         })
         
+        // add conversation
+        const addConversation = () => {
+            console.log('ok');
+        }
 
         const user_id = <?=$auth['id'];?>;
 
-
-        // window.addEventListener("resize", function() {
-        //     if (window.innerWidth < 769) document.querySelector('.sidebar').style.display = 'flex !important';
-        // });
     </script>
 </body>
 </html>

@@ -48,3 +48,4 @@ const leaveGroup = (group_id, user_id) => {
         });
     }
 }
+

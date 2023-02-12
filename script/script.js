@@ -1,5 +1,4 @@
 function getMessages(){
-    // let seen = false;
     const request = new XMLHttpRequest();
     request.addEventListener("readystatechange", () => {
         if (request.readyState === 4 && request.status === 200) {
@@ -100,7 +99,7 @@ function getUserlist() {
       const html = results.map(function(message){
         message.unreaded > 0 ? unreaded = true : false;
         if (userListAll.classList.contains('show')) {
-            return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id ?? message.id}" data-isgroup="${message.is_group ?? 'false'}">
+            return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id ?? message.id}" data-isgroup="${message.is_group ?? 'false'}"  data-name="${message.is_group ? message.name : message.name + " " + message.last_name}">
                         <div class="user-content">
                             <div class="avatar-holder">
                                 <img src="" alt="">
@@ -114,7 +113,7 @@ function getUserlist() {
                     </button>`
         } else if(userListDialog.classList.contains('show')) {
             if (!message.is_group) {
-                return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id}" data-isgroup="'false'">
+                return `<button class="member-list" onclick="openMessage(this)" data-id="${message.conversation_id}" data-isgroup="'false'" data-name="${message.name} ${message.last_name}">
                 <div class="user-content">
                                 <div class="avatar-holder">
                                     <img src="" alt="">
@@ -129,7 +128,7 @@ function getUserlist() {
             }
         } else {
             if (message.is_group) {
-                return `<button class="member-list" onclick="openMessage(this)" data-id="${message.id}" data-isgroup="${message.is_group}">
+                return `<button class="member-list" onclick="openMessage(this)" data-id="${message.id}" data-isgroup="${message.is_group}" data-name="${message.name}">
                                 <div class="user-content">
                                     <div class="avatar-holder">
                                         <img src="" alt="">
@@ -179,4 +178,17 @@ function changeStatus(conversation_id) {
     }
     
     request.send(data);
+}
+
+function getMessageQty(user_id) {
+    const request = new XMLHttpRequest();
+
+    request.open("GET", `api/get_message_qty.php?user_id=${user_id}`);
+  
+    request.onload = function(){
+        const results = JSON.parse(request.responseText);
+        document.querySelector('.message_qty').innerHTML = results.length;
+
+    }
+    request.send();
 }
